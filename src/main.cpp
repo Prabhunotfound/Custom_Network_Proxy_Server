@@ -38,8 +38,11 @@ int main()
     init_metrics(global_config.metrics_file);                              // initialize Metrics file
 
     cout << "[INFO] Starting Proxy Server on " << global_config.listen_address << ":" << global_config.listen_port << endl;
+    log_info("Starting Proxy Server on " + global_config.listen_address + ":" + to_string(global_config.listen_port));
 
     start_server(global_config.listen_port); // Start the server
+
+    log_info("Proxy Server stopped cleanly");
 
     close_logger(); // close the log file cleanly after shutdown is initiated
 
