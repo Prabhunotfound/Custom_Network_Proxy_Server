@@ -7,7 +7,7 @@ build/
 *.o
 
 # logs & runtime files
-*.log
+proxy.log
 metrics.txt
 
 # editor / OS noise

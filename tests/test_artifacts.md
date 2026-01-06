@@ -12,10 +12,11 @@ To verify that the proxy correctly forwards a valid HTTP/HTTPS request to the de
 #### Test Command - Basic HTTP GET
 
 ```bash
-curl -x http://localhost:8080 http://example.com
+curl -x http://localhost:2205 http://example.com
 ```
 
 **Observed Behavior**
+
 The client receives a valid HTTP response from the destination server.The connection is closed after the response is fully received.
 
 **Log Entry**
@@ -27,10 +28,11 @@ The client receives a valid HTTP response from the destination server.The connec
 #### Test Command - HTTP GET with Explicit Path
 
 ```bash
-curl -x http://localhost:8080 http://example.com/index.html
+curl -x http://localhost:2205 http://example.com/index.html
 ```
 
 **Observed Behavior**
+
 The client receives the correct response content for /index.html.
 
 **Log Entry**
@@ -42,10 +44,11 @@ The client receives the correct response content for /index.html.
 #### Test Command - HTTPS Request via CONNECT
 
 ```bash
-curl -x http://localhost:8080 https://www.google.com
+curl -x http://localhost:2205 https://www.google.com
 ```
 
 **Observed Behavior**
+
 The proxy establishes an HTTPS tunnel using the CONNECT method. Encrypted traffic is forwarded transparently.The client successfully receives the HTTPS response.
 
 **Log Entry**
@@ -69,10 +72,11 @@ Example: example.net(say)
 **Test Command**
 
 ```bash
-curl -x http://localhost:8080 http://example.net
+curl -x http://localhost:2205 http://example.net
 ```
 
 **Observed Behavior**
+
 The client receives an HTTP 403 Forbidden response and the connection is closed.
 Response: Access to the requested domain is blocked.
 
@@ -85,10 +89,11 @@ Response: Access to the requested domain is blocked.
 **Test Command - For Sub-domain**
 
 ```bash
-curl -x http://localhost:8080 http://sub.example.net
+curl -x http://localhost:2205 http://sub.example.net
 ```
 
 **Observed Behavior**
+
 The client receives the same HTTP 403 Forbidden response as above and the connection is closed.
 Response: Access to the requested domain is blocked.
 
@@ -111,15 +116,17 @@ The following command generates multiple concurrent HTTP requests through the pr
 
 ```bash
 for i in {1..20}; do
-  curl -x http://localhost:8080 http://example.com &
+  curl -x http://localhost:2205 http://example.com &
 done
 wait
 ```
 
 **Observed Behavior**
+
 All client requests complete successfully. Each request receives a valid HTTP response. No crashes, deadlocks, or resource exhaustion are observed.
 
 **Log Entry**
+
 Following but just repeated 20 times :
 
 ```bash
@@ -138,7 +145,7 @@ To verify that the proxy server correctly detects malformed HTTP requests, retur
 A malformed request is sent manually using `telnet` to simulate raw client input:
 
 ```bash
-telnet localhost 8080
+telnet localhost 2205
 ```
 
 After connecting, type the following exactly, pressing ENTER after each line:
@@ -150,6 +157,7 @@ Host : example.com
 ```
 
 **Observed Behavior**
+
 The proxy responds with an HTTP 400 Bad Request error with proper response on the terminal.
 
 **Log Entry**
@@ -170,10 +178,11 @@ To verify that the proxy server correctly enforces socket-level timeouts and doe
 Establish an idle TCP connection without sending any request data:
 
 ```bash
-nc -v localhost 8080 < /dev/null
+nc -v localhost 2205 < /dev/null
 ```
 
 **Observed Behavior**
+
 The proxy closes the idle connection automatically after the timeout expires and displays a well formed BAD REQUEST Response.
 
 **Log Entry**
@@ -184,7 +193,7 @@ The proxy closes the idle connection automatically after the timeout expires and
 
 ---
 
-## Test 6: Graceful Shutdown Handling
+## Test 6: Graceful Shutdown
 
 **Purpose**  
 To verify that the proxy server shuts down gracefully when a termination signal is received, allowing in-flight requests to complete while preventing acceptance of new connections.
@@ -194,7 +203,7 @@ To verify that the proxy server shuts down gracefully when a termination signal 
 Start a request through the proxy and initiate shutdown while the request is in progress.
 
 ```bash
-curl -x http://localhost:8080 http://example.com
+curl -x http://localhost:2205 http://example.com
 ```
 
 In a separate terminal, identify the proxy process ID and send a termination signal:
@@ -212,6 +221,7 @@ kill -SIGINT <PID>
 Alternatively press **Ctrl+C** in the terminal where the server is running .
 
 **Observed Behavior**
+
 The Server initiates Graceful Shutdown and cleanly closes the server and the open file if any.
 Output in the terminal:
 

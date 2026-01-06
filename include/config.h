@@ -11,9 +11,9 @@ struct Config
     string blocklist_file = "";
     string log_file = "";
     string metrics_file = "";
-    bool enable_blocklist;
-    bool enable_https_tunnel;
-    bool log_enabled;
+    bool enable_blocklist = true;
+    bool enable_https_tunnel = true;
+    bool log_enabled = true;
     int connection_timeout_sec;
     int listen_port;
     int thread_pool_size;
