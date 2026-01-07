@@ -32,8 +32,16 @@ void start_server(int port)
 
     sockaddr_in addr{};
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = INADDR_ANY;
     addr.sin_port = htons(port);
+
+    if (global_config.listen_address == "0.0.0.0")
+    {
+        addr.sin_addr.s_addr = INADDR_ANY;
+    }
+    else
+    {
+        inet_pton(AF_INET, global_config.listen_address.c_str(), &addr.sin_addr);
+    }
 
     if (bind(server_fd, (sockaddr *)&addr, sizeof(addr)) < 0)
     {
