@@ -1,0 +1,6 @@
+Total Requests : 26
+Blocked Requests : 5
+Allowed Requests : 23
+Bytes transferred : 104438
+Top Requested Host : example.com - 22
+Requests Per Minute : 23.2836

@@ -78,7 +78,7 @@ curl -x http://localhost:2205 http://example.net
 **Observed Behavior**
 
 The client receives an HTTP 403 Forbidden response and the connection is closed.
-Response: Access to the requested domain is blocked.
+**Response:** Access to the requested domain is blocked.
 
 **Log Entry**
 
@@ -95,12 +95,29 @@ curl -x http://localhost:2205 http://sub.example.net
 **Observed Behavior**
 
 The client receives the same HTTP 403 Forbidden response as above and the connection is closed.
-Response: Access to the requested domain is blocked.
+**Response:** Access to the requested domain is blocked.
 
 **Log Entry**
 
 ```bash
 [YYYY-MM-DD HH:MM:SS] 127.0.0.1:35830 | "GET / HTTP/1.0" | sub.example.net:80 | BLOCKED | 403 | bytes=0
+```
+
+**Test Command - For Connect Request**
+
+```bash
+curl -x http://localhost:2205 https://sub.example.net
+```
+
+**Observed Behavior**
+
+The client receives the same HTTP 403 Forbidden response as above and the connection is closed.
+**Response:** curl: (56) CONNECT tunnel failed, response 403
+
+**Log Entry**
+
+```bash
+[YYYY-MM-DD HH:MM:SS] 127.0.0.1:41122 | "CONNECT  HTTP/1.0" | sub.example.net:443 | BLOCKED | 403 | bytes=0
 ```
 
 ---
@@ -153,7 +170,6 @@ Example : Request missing HTTP version
 
 ```bash
 GET /
-Host : example.com
 ```
 
 **Observed Behavior**
