@@ -21,7 +21,6 @@ All architectural design decisions, execution flow, concurrency model, and flowc
 - External configuration through a file for runtime behavior tuning
 - Safe handling of partial reads and writes on TCP sockets
 - Clear separation of concerns through a modular code structure
-
 ---
 
 ## HTTP Behavior
